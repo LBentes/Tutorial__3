@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class RubyController : MonoBehaviour
 {
@@ -9,6 +11,8 @@ public class RubyController : MonoBehaviour
     public int maxHealth = 5;
     
     public GameObject projectilePrefab;
+    public GameObject HealthDecreasePrefab;
+    public GameObject HealthIncreasePrefab;
     
     public AudioClip throwSound;
     public AudioClip hitSound;
@@ -28,6 +32,14 @@ public class RubyController : MonoBehaviour
     Vector2 lookDirection = new Vector2(1,0);
     
     AudioSource audioSource;
+    private bool gameOver;
+    private bool restart;
+    public Text gameOverText;
+    public AudioClip musicClipOne;
+    public AudioClip musicClipTwo;
+    public AudioSource musicSource;
+    public Text AltmusicText;
+    public AudioSource musicSourceTwo;
     
     // Start is called before the first frame update
     void Start()
@@ -38,6 +50,9 @@ public class RubyController : MonoBehaviour
         currentHealth = maxHealth;
 
         audioSource = GetComponent<AudioSource>();
+        gameOver = false;
+        restart = false;
+        gameOverText.text = "";
     }
 
     // Update is called once per frame
@@ -82,10 +97,39 @@ public class RubyController : MonoBehaviour
                 }
             }
         }
-        if (Input.GetKey("escape"))
-{
-Application.Quit();
-}
+        if (Input.GetKey(KeyCode.R))
+
+        {
+
+            if (gameOver == true)
+
+            {
+
+              SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // this loads the currently active scene
+              musicSource.Stop();
+
+            }
+
+        }
+         if (Input.GetKeyDown(KeyCode.E))
+        {
+          musicSource.clip = musicClipOne;
+          musicSource.Play();
+          AltmusicText.text = "Alt Music 1";
+          musicSourceTwo.Stop();
+
+         }
+
+     if (Input.GetKeyUp(KeyCode.E))
+        {
+          musicSource.Stop();
+          AltmusicText.text = "";
+          musicSourceTwo.Play();
+         }
+         if (Input.GetKey("escape"))
+        {
+            Application.Quit();
+        }
     }
     
     void FixedUpdate()
@@ -106,14 +150,27 @@ Application.Quit();
             
             isInvincible = true;
             invincibleTimer = timeInvincible;
+            GameObject HealthDecreaseObject = Instantiate(HealthDecreasePrefab, rigidbody2d.position + Vector2.up * 0.5f, Quaternion.identity);
             
             PlaySound(hitSound);
+        }
+        if (amount > 0){
+            GameObject HealthIncreaseObject = Instantiate(HealthIncreasePrefab, rigidbody2d.position + Vector2.up * 0.5f, Quaternion.identity);
         }
         
         currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
         
         UIHealthBar.instance.SetValue(currentHealth / (float)maxHealth);
+        if (currentHealth <= 0){
+            gameOverText.text = "You Lost! Press R to restart";
+            gameOver = true;
+            speed = 0;
+            musicSource.clip = musicClipTwo;
+            musicSource.Play();
+            musicSourceTwo.Stop();
+        }
     }
+
     
     void Launch()
     {

@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 8434153885118295951}
   m_Layer: 8
   m_Name: Ruby
-  m_TagString: Untagged
+  m_TagString: RubyController
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -103,6 +103,8 @@ MonoBehaviour:
   speed: 3
   maxHealth: 5
   projectilePrefab: {fileID: 1096631499871733911, guid: d756d973c7f704cbbb5654b76e2c2efa, type: 3}
+  HealthDecreasePrefab: {fileID: 4625158187258475963, guid: 29a2477d84fc24d10b4b1d8ecd2ceb88, type: 3}
+  HealthIncreasePrefab: {fileID: 2070603849445991107, guid: 8f9c422aa35304ddeab08857352175d2, type: 3}
   throwSound: {fileID: 8300000, guid: b2edfd40873655249ba0e01a5cf705be, type: 3}
   hitSound: {fileID: 8300000, guid: 9b1bb1f450b7d444fa4a8019d13519a7, type: 3}
   timeInvincible: 2
